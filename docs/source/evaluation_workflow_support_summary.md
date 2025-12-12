@@ -2,7 +2,7 @@
 
 **Last Updated:** 2025-12-12
 
-## Overall Support: 19/34 Strategies (56%)
+## Overall Support: 18/34 Strategies (53%)
 
 ### ✅ Fully Supported Areas
 
@@ -16,8 +16,8 @@
 2. **Model Integration**
    - Remote API models (OpenAI, Cohere, Bedrock, etc.)
    - Local models (HuggingFace, LlamaIndex, vLLM)
-   - Vector databases (Milvus, Chroma, Qdrant, Pinecone, Weaviate)
-   - BM25 and hybrid retrieval
+   
+   **Note:** Vector databases and BM25 are used as pipeline components, not evaluated as standalone SUTs
 
 3. **Data & Benchmarks**
    - Parquet dataset loading

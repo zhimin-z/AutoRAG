@@ -85,11 +85,12 @@ AutoRAG is a specialized RAG (Retrieval-Augmented Generation) optimization frame
 - GPU acceleration support with `pip install "AutoRAG[gpu]"`
 - vLLM support for optimized local inference
 
-**Strategy 3: Algorithm Implementation (In-Memory Structures)** ✅ **SUPPORTED**
-- BM25 (lexical retrieval) with rank_bm25
-- Vector database indexes (FAISS via Milvus, HNSW via Qdrant, etc.)
-- Multiple vector database backends: Chroma, Milvus, Weaviate, Pinecone, Qdrant, Couchbase
-- Hybrid retrieval combining BM25 and semantic search
+**Strategy 3: Algorithm Implementation (In-Memory Structures)** ❌ **NOT SUPPORTED**
+- AutoRAG does not evaluate algorithm implementations as standalone SUTs
+- BM25, vector indexes, and hybrid retrieval are **pipeline components**, not independent SUTs
+- The SUT in AutoRAG is always the complete RAG pipeline (retrieval + reranking + generation)
+- No support for evaluating ANN algorithms, ranking algorithms, or KG embeddings as independent systems
+- AutoRAG uses these algorithms as building blocks but does not benchmark them in isolation
 
 **Strategy 4: Policy/Agent Instantiation (Stateful Controllers)** ❌ **NOT SUPPORTED**
 - AutoRAG focuses on RAG pipeline evaluation, not agent/policy evaluation
@@ -261,14 +262,14 @@ AutoRAG is a specialized RAG (Retrieval-Augmented Generation) optimization frame
 
 ### Supported Strategies Summary
 
-AutoRAG natively supports **19 out of 34** strategies (56%) from the unified evaluation workflow:
+AutoRAG natively supports **18 out of 34** strategies (53%) from the unified evaluation workflow:
 
 **Phase 0 - Provisioning:** 5/8 strategies
 - ✅ PyPI Packages, Git Clone, Container Images
 - ✅ API Provider Authentication, Repository Authentication
 
-**Phase I - Specification:** 7/10 strategies
-- ✅ Model-as-a-Service, Model-in-Process, Algorithm Implementation
+**Phase I - Specification:** 6/10 strategies
+- ✅ Model-as-a-Service, Model-in-Process
 - ✅ Benchmark Dataset Preparation, Synthetic Data Generation
 - ✅ Judge Preparation, Ground Truth Preparation
 
