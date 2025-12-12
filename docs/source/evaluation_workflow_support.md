@@ -261,13 +261,13 @@ AutoRAG is a specialized RAG (Retrieval-Augmented Generation) optimization frame
 
 ### Supported Strategies Summary
 
-AutoRAG natively supports **18 out of 38** strategies (47%) from the unified evaluation workflow:
+AutoRAG natively supports **19 out of 34** strategies (56%) from the unified evaluation workflow:
 
 **Phase 0 - Provisioning:** 5/8 strategies
 - ✅ PyPI Packages, Git Clone, Container Images
 - ✅ API Provider Authentication, Repository Authentication
 
-**Phase I - Specification:** 7/9 strategies
+**Phase I - Specification:** 7/10 strategies
 - ✅ Model-as-a-Service, Model-in-Process, Algorithm Implementation
 - ✅ Benchmark Dataset Preparation, Synthetic Data Generation
 - ✅ Judge Preparation, Ground Truth Preparation
@@ -279,7 +279,7 @@ AutoRAG natively supports **18 out of 38** strategies (47%) from the unified eva
 - ✅ Deterministic Measurement, Embedding Measurement, Subjective Measurement
 - ✅ Score Aggregation
 
-**Phase IV - Reporting:** 2/5 strategies
+**Phase IV - Reporting:** 2/6 strategies
 - ✅ Chart Generation, Dashboard Creation
 
 ### Core Strengths
