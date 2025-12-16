@@ -49,16 +49,18 @@ AutoRAG is a specialized RAG (Retrieval-Augmented Generation) optimization frame
 - AutoRAG does not integrate with external evaluation platforms or leaderboard submission APIs
 - No command-line authentication flows for evaluation services
 
-**Strategy 2: API Provider Authentication** ✅ **SUPPORTED**
+**Strategy 2: API Provider Authentication** ✅ **NATIVELY SUPPORTED**
 - Supports environment variable configuration for API keys (OpenAI, Cohere, Voyage AI, etc.)
 - Environment variable setup: `export OPENAI_API_KEY="sk-..."`
 - `.env` file support with `python-dotenv`
 - Required for using commercial LLM and embedding providers
+- Available immediately after installation with minimal configuration
 
-**Strategy 3: Repository Authentication** ✅ **SUPPORTED**
+**Strategy 3: Repository Authentication** ✅ **NATIVELY SUPPORTED**
 - Integrates with Hugging Face for model and dataset access
 - Uses standard Hugging Face authentication tokens
 - Supports both public and gated model access through HF ecosystem
+- Works out-of-the-box with standard HuggingFace authentication
 
 ---
 
@@ -66,7 +68,7 @@ AutoRAG is a specialized RAG (Retrieval-Augmented Generation) optimization frame
 
 ### Step A: SUT Preparation
 
-**Strategy 1: Model-as-a-Service (Remote Inference)** ✅ **SUPPORTED**
+**Strategy 1: Model-as-a-Service (Remote Inference)** ✅ **NATIVELY SUPPORTED**
 - Extensive support for remote API-based models:
   - OpenAI models (GPT-4, GPT-3.5, embeddings)
   - Cohere API for reranking
@@ -76,14 +78,16 @@ AutoRAG is a specialized RAG (Retrieval-Augmented Generation) optimization frame
   - Nvidia NIM
   - Custom OpenAI-compatible endpoints
 - Configuration through YAML files and API clients
+- All providers included in base installation dependencies
 
-**Strategy 2: Model-in-Process (Local Inference)** ✅ **SUPPORTED**
+**Strategy 2: Model-in-Process (Local Inference)** ✅ **NATIVELY SUPPORTED**
 - Local model loading via HuggingFace transformers
 - Integration with LlamaIndex for local LLMs
 - Support for local embedding models (sentence-transformers)
 - Local rerankers (FlashRank, BAAI/bge-reranker, ColBERT, MonoT5, etc.)
 - GPU acceleration support with `pip install "AutoRAG[gpu]"`
 - vLLM support for optimized local inference
+- All frameworks included in base or optional dependencies
 
 **Strategy 3: Algorithm Implementation (In-Memory Structures)** ❌ **NOT SUPPORTED**
 - AutoRAG does not evaluate algorithm implementations as standalone SUTs
@@ -99,20 +103,27 @@ AutoRAG is a specialized RAG (Retrieval-Augmented Generation) optimization frame
 
 ### Step B: Benchmark Preparation (Inputs)
 
-**Strategy 1: Benchmark Dataset Preparation (Offline)** ✅ **SUPPORTED**
+**Strategy 1: Benchmark Dataset Preparation (Offline)** ✅ **NATIVELY SUPPORTED**
 - Parquet-based dataset loading for QA and corpus data
 - Data parsing from multiple formats (PDF, DOCX, etc.) via LlamaIndex and Langchain
 - Chunking modules for preprocessing (token-based, semantic, etc.)
 - Dataset validation and casting utilities
 - Integration with Hugging Face datasets
 - Sample datasets available on Hugging Face
+- All required libraries (pandas, pyarrow, llama-index, langchain) in dependencies
 
-**Strategy 2: Synthetic Data Generation (Generative)** ✅ **SUPPORTED**
-- QA dataset generation from corpus using LLMs
-- Query generation (`factoid_query_gen`, multi-hop queries)
-- Answer generation (`make_basic_gen_gt`, `make_concise_gen_gt`)
-- Retrieval ground truth generation
-- Filtering mechanisms (e.g., `dontknow_filter_rule_based`)
+**Strategy 2: Synthetic Data Generation (Generative)** ✅ **NATIVELY SUPPORTED** (+ **INTEGRATED SUPPORT** via Ragas)
+- **Native capabilities:**
+  - QA dataset generation from corpus using LLMs (via built-in modules)
+  - Query generation (`factoid_query_gen`, multi-hop queries)
+  - Answer generation (`make_basic_gen_gt`, `make_concise_gen_gt`)
+  - Retrieval ground truth generation
+  - Filtering mechanisms (e.g., `dontknow_filter_rule_based`)
+  - Uses LlamaIndex and Langchain (included in dependencies)
+- **Integrated support:**
+  - Ragas integration available in `autorag/data/legacy/qacreation/ragas.py`
+  - Requires: `pip install ragas` (external package not in base dependencies)
+  - Documented integration pattern with glue code provided
 
 **Strategy 3: Simulation Environment Setup (Simulated)** ❌ **NOT SUPPORTED**
 - No support for interactive environments or simulations
@@ -126,19 +137,21 @@ AutoRAG is a specialized RAG (Retrieval-Augmented Generation) optimization frame
 
 ### Step C: Benchmark Preparation (References)
 
-**Strategy 1: Judge Preparation** ✅ **SUPPORTED**
+**Strategy 1: Judge Preparation** ✅ **NATIVELY SUPPORTED**
 - LLM-as-judge metrics supported:
   - G-Eval for coherence, consistency, fluency, relevance
   - DeepEval-based prompts for evaluation
 - Pre-configured judge models (GPT-4, etc.)
 - Custom LLM judge configuration through YAML
+- Built-in prompt templates, uses LLMs from base dependencies
 
-**Strategy 2: Ground Truth Preparation** ✅ **SUPPORTED**
+**Strategy 2: Ground Truth Preparation** ✅ **NATIVELY SUPPORTED**
 - Pre-loading of ground truth from parquet datasets
 - Retrieval ground truth (doc IDs and content)
 - Generation ground truth (reference answers)
 - Embedding index preparation for semantic retrieval
 - BM25 index preparation for lexical retrieval
+- All functionality built into core evaluation pipeline
 
 ---
 
@@ -146,12 +159,13 @@ AutoRAG is a specialized RAG (Retrieval-Augmented Generation) optimization frame
 
 ### Step A: SUT Invocation
 
-**Strategy 1: Batch Inference** ✅ **SUPPORTED**
+**Strategy 1: Batch Inference** ✅ **NATIVELY SUPPORTED**
 - Primary execution mode in AutoRAG
 - Evaluates entire QA datasets through RAG pipelines
 - Supports batch processing with configurable batch sizes
 - Multiple module combinations tested in parallel
 - AutoML-style grid search over configurations
+- Core functionality of the Evaluator class
 
 **Strategy 2: Interactive Loop** ❌ **NOT SUPPORTED**
 - No support for stateful, iterative interactions
@@ -175,7 +189,7 @@ AutoRAG is a specialized RAG (Retrieval-Augmented Generation) optimization frame
 
 ### Step A: Individual Scoring
 
-**Strategy 1: Deterministic Measurement** ✅ **SUPPORTED**
+**Strategy 1: Deterministic Measurement** ✅ **NATIVELY SUPPORTED**
 - Retrieval metrics:
   - Precision, Recall, F1, NDCG, MRR, MAP
   - Token-based metrics (retrieval_token_f1, retrieval_token_recall, etc.)
@@ -184,20 +198,23 @@ AutoRAG is a specialized RAG (Retrieval-Augmented Generation) optimization frame
   - ROUGE (n-gram based recall)
   - METEOR (with stemming and synonyms)
 - Exact matching and algorithmic calculations
+- All metrics implemented using dependencies: sacrebleu, evaluate, rouge_score
 
-**Strategy 2: Embedding Measurement** ✅ **SUPPORTED**
+**Strategy 2: Embedding Measurement** ✅ **NATIVELY SUPPORTED**
 - Semantic similarity metrics:
   - SemScore (sentence embedding similarity)
   - BERTScore support through embeddings
 - Embedding models: OpenAI, HuggingFace, custom models
 - Context precision using embeddings (Ragas-based)
+- Embedding functionality via llama-index (in dependencies)
 
-**Strategy 3: Subjective Measurement** ✅ **SUPPORTED**
+**Strategy 3: Subjective Measurement** ✅ **NATIVELY SUPPORTED**
 - LLM-as-judge metrics:
   - G-Eval (coherence, consistency, fluency, relevance)
   - Custom prompt-based evaluation
   - GPT-4 and other LLMs as evaluators
 - DeepEval integration for subjective assessments
+- Built-in prompt templates, uses LLMs from base dependencies
 
 **Strategy 4: Performance Measurement** ❌ **NOT SUPPORTED**
 - No native metrics for latency, throughput, or resource consumption
@@ -206,11 +223,12 @@ AutoRAG is a specialized RAG (Retrieval-Augmented Generation) optimization frame
 
 ### Step B: Collective Aggregation
 
-**Strategy 1: Score Aggregation** ✅ **SUPPORTED**
+**Strategy 1: Score Aggregation** ✅ **NATIVELY SUPPORTED**
 - Automatic aggregation of per-instance scores to benchmark-level metrics
 - Mean, median, and other statistical aggregations
 - Summary CSV files with aggregate results
 - Multi-metric optimization support in YAML configs
+- Built-in pandas-based aggregation functionality
 
 **Strategy 2: Uncertainty Quantification** ❌ **NOT SUPPORTED**
 - No bootstrap resampling for confidence intervals
@@ -233,18 +251,20 @@ AutoRAG is a specialized RAG (Retrieval-Augmented Generation) optimization frame
 - Results are aggregated globally, not broken down by subgroups
 - Users must manually analyze subgroups
 
-**Strategy 3: Chart Generation** ✅ **SUPPORTED**
+**Strategy 3: Chart Generation** ✅ **NATIVELY SUPPORTED**
 - Dashboard with visualizations (via Panel and Seaborn)
 - Performance comparison charts across modules
 - Metric trend visualization
 - Interactive plots in dashboard
+- All visualization libraries (panel, seaborn) in dependencies
 
-**Strategy 4: Dashboard Creation** ✅ **SUPPORTED**
+**Strategy 4: Dashboard Creation** ✅ **NATIVELY SUPPORTED**
 - Web-based dashboard: `autorag dashboard --trial_dir /path/to/trial`
 - Interactive web interface for exploring results
 - Table-based result browsing
 - Runs on localhost with configurable port
 - Visualization of module comparisons and rankings
+- Built using Panel framework (included in dependencies)
 
 **Strategy 5: Leaderboard Publication** ❌ **NOT SUPPORTED**
 - No integration with public or private leaderboards
@@ -262,26 +282,33 @@ AutoRAG is a specialized RAG (Retrieval-Augmented Generation) optimization frame
 
 ### Supported Strategies Summary
 
-AutoRAG natively supports **18 out of 34** strategies (53%) from the unified evaluation workflow:
+AutoRAG provides **18 out of 34** strategies (53%) from the unified evaluation workflow, with **15 natively supported strategies** plus **1 additional integrated capability**:
 
-**Phase 0 - Provisioning:** 5/8 strategies
-- ✅ PyPI Packages, Git Clone, Container Images
-- ✅ API Provider Authentication, Repository Authentication
+**Phase 0 - Provisioning:** 5/8 strategies (all native or N/A)
+- ✅ PyPI Packages, Git Clone, Container Images (installation methods)
+- ✅ **Natively:** API Provider Authentication, Repository Authentication
 
-**Phase I - Specification:** 6/10 strategies
-- ✅ Model-as-a-Service, Model-in-Process
-- ✅ Benchmark Dataset Preparation, Synthetic Data Generation
-- ✅ Judge Preparation, Ground Truth Preparation
+**Phase I - Specification:** 6/10 strategies (all native + 1 integration)
+- ✅ **Natively:** Model-as-a-Service, Model-in-Process
+- ✅ **Natively:** Benchmark Dataset Preparation
+- ✅ **Natively + Integrated:** Synthetic Data Generation (native modules + Ragas integration)
+- ✅ **Natively:** Judge Preparation, Ground Truth Preparation
 
-**Phase II - Execution:** 1/4 strategies
-- ✅ Batch Inference
+**Phase II - Execution:** 1/4 strategies (native)
+- ✅ **Natively:** Batch Inference
 
-**Phase III - Assessment:** 4/6 strategies
-- ✅ Deterministic Measurement, Embedding Measurement, Subjective Measurement
-- ✅ Score Aggregation
+**Phase III - Assessment:** 4/6 strategies (all native)
+- ✅ **Natively:** Deterministic Measurement, Embedding Measurement, Subjective Measurement
+- ✅ **Natively:** Score Aggregation
 
-**Phase IV - Reporting:** 2/6 strategies
-- ✅ Chart Generation, Dashboard Creation
+**Phase IV - Reporting:** 2/6 strategies (all native)
+- ✅ **Natively:** Chart Generation, Dashboard Creation
+
+### Classification Key
+
+- **Natively Supported**: Available immediately after `pip install AutoRAG`, all dependencies included, minimal configuration required
+- **Supported via Integration**: Requires external package installation (e.g., `pip install ragas`) plus documented glue code
+- **Supported**: Installation methods and provisioning (not classified as native/integrated)
 
 ### Core Strengths
 
